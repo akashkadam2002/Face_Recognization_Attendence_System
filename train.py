@@ -6,6 +6,7 @@ import mysql.connector
 import cv2
 import os
 import numpy as np
+# import face_recognition
 
 class Train:
     def __init__(self,root):
@@ -59,19 +60,12 @@ class Train:
 
         #============== Train the classifier & save ============== 
 
-        clf=cv2.face.createLBPHFaceRecognizer()
+        clf=cv2.face.LBPHFaceRecognizer_create()
+        # clf = face_recognition
         clf.train(faces,ids)
         clf.write("classifier.xml")
         cv2.destroyAllWindows()
         messagebox.showinfo("Result","Training datasets completed!!!")
-
-
-
-
-
-
-       
-
 
 
 
