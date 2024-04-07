@@ -99,7 +99,7 @@ class Face_Recognition:
         cv2.destroyAllWindows()    
         video_cap.release()
         
-
+        
 if __name__ == "__main__":
     root=Tk()
     obj=Face_Recognition(root)

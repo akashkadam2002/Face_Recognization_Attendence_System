@@ -599,7 +599,6 @@ def validate_phone_input(new_value):
 #     else:
 #         return False
 
-
 if __name__ == "__main__":
     root=Tk()
     obj=student(root)
