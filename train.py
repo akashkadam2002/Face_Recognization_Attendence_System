@@ -68,7 +68,6 @@ class Train:
         messagebox.showinfo("Result","Training datasets completed!!!")
 
 
-
 if __name__ == "__main__":
     root=Tk()
     obj=Train(root)

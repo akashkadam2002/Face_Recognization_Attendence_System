@@ -165,8 +165,6 @@ class Face_recognise:
 
 
 
-
-
     def open_img(self):
         os.startfile("data")
 
@@ -189,10 +187,3 @@ if __name__ == "__main__":
     root = Tk()
     obj = Face_recognise(root)
     root.mainloop()
-
-
-
-
-
-
-
