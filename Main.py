@@ -103,20 +103,6 @@ class Face_recognise:
         b3_1.place(x=int(screen_width / 1.4), y=int(screen_height / 10) + int(screen_height / 4) + 10,
                     width=int(screen_width / 7), height=int(screen_height / 20))
 
-        # Help desk button
-        # img7 = Image.open(r"D:\Python\face4.jpg")
-        # img7 = img7.resize((int(screen_width / 7), int(screen_height / 4)))
-        # self.photoimg7 = ImageTk.PhotoImage(img7)
-
-        # b4 = Button(bg_img, image=self.photoimg7, cursor="hand2")
-        # b4.place(x=int(screen_width / 1.16), y=int(screen_height / 10), width=int(screen_width / 7),
-        #           height=int(screen_height / 4))
-
-        # b4_1 = Button(bg_img, text="Help Desk", cursor="hand2", font=("times new roman", 15, "bold"),
-        #                bg="darkblue", fg="white")
-        # b4_1.place(x=int(screen_width / 1.16), y=int(screen_height / 10) + int(screen_height / 4) + 10,
-        #             width=int(screen_width / 7), height=int(screen_height / 20))
-
         # Train face button
         img8 = Image.open(r"D:\Python\Images\face4.jpg")
         img8 = img8.resize((int(screen_width / 7), int(screen_height / 4)))

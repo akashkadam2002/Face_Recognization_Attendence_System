@@ -205,7 +205,6 @@ class Attendance:
                 myData.append(i)
             self.fetch_data(myData)
 
-
     # Export CSV
     def exportCsv(self):
         try:

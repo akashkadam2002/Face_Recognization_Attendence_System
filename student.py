@@ -81,13 +81,6 @@ class student:
         left_frame=LabelFrame(main_frame,bd=2,bg="white",relief=RIDGE,text="Student Details",font=("times new roman",20,"bold"))
         left_frame.place(x=10,y=5,width=630,height=500)
 
-        # img_left=Image.open(r"C:\Users\PC\OneDrive\Desktop\Python-Face Recognition System\College Images\studLeft.jpg")
-        # img_left = img_left.resize((615,150))
-        # self.photoimg_left=ImageTk.PhotoImage(img_left)
-
-        # f_lbl=Label(left_frame,image=self.photoimg_left)
-        # f_lbl.place(x=5,y=0,width=615,height=150)
-
         # current course
         currentCourse_frame=LabelFrame(left_frame,bd=2,bg="white",relief=RIDGE,text="Current Course Information",font=("times new roman",14,"bold"))
         currentCourse_frame.place(x=5,y=0,width=615,height=150)
@@ -148,7 +141,6 @@ class student:
 
         validation = self.root.register(validate_student_name_input)
         studentname_entry.config(validate="key", validatecommand=(validation, "%P"))
-
 
         #class division
         class_div_label=Label(Student_class_frame,text="Class Division: ",font=("times new roman",12,"bold"),bg="white")

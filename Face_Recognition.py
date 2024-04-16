@@ -54,8 +54,6 @@ class Face_Recognition:
                 dtString=now.strftime("%H:%M:%S")
                 f.writelines(f"\n{i},{r},{n},{d},{dtString},{d1},Present")
 
-
-
     #=======================Face Recognition======================
 
     def face_recog(self):
@@ -141,8 +139,6 @@ class Face_Recognition:
             
         cv2.destroyAllWindows()    
         video_cap.release()
-        # self.root.quit()
-
 
         
 if __name__ == "__main__":

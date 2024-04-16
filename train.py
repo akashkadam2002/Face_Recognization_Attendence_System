@@ -6,14 +6,12 @@ import mysql.connector
 import cv2
 import os
 import numpy as np
-# import face_recognition
 
 class Train:
     def __init__(self,root):
         self.root=root
         self.root.geometry("1530x750+0+0")
         self.root.title("Face Recgnition System")
-
 
         title_lbl=Label(self.root,text="TRAIN DATA SET",font=("times new roman",35,"bold"),bg="white",fg="red")
         title_lbl.place(x=0,y=0,width=1380,height=45)
@@ -29,8 +27,6 @@ class Train:
         b1_1 = Button(self.root, text="TRAIN DATA", cursor="hand2",command=self.train_classfier, font=("times new roman", 30, "bold"),
                       bg="blue", fg="white")
         b1_1.place(x=0, y= 320,width=1400, height=90)
-
-
 
         img_bottom= Image.open(r"Images\face.jpg")
         img_bottom = img_bottom.resize((1400,290))
