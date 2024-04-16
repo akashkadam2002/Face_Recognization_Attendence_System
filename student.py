@@ -1,17 +1,23 @@
-from tkinter import*
+from tkinter import *
 from tkinter import ttk
-from PIL import Image,ImageTk
+from PIL import Image, ImageTk
 from tkinter import messagebox
 import mysql.connector
 from tkcalendar import DateEntry
 import cv2
 import re
+import pyttsx3
+
 
 class student:
     def __init__(self,root):
+        self.root = root
+        self.Search_combo = ttk.Combobox(self.root, values=["Select", "Roll No", "StudentID"]) 
+        self.Search_combo.set("Select")
         self.root=root
         self.root.geometry("1530x750+0+0")
         self.root.title("Face Recgnition System")
+        self.engine = pyttsx3.init()
 
         # variables
         self.var_dep=StringVar()
@@ -28,6 +34,7 @@ class student:
         self.var_phone=StringVar()
         self.var_address=StringVar()
         self.var_teacher=StringVar()
+        
 
         # first Image
         img1= Image.open(r"D:\Python\Images\face4.jpg")
@@ -250,7 +257,7 @@ class student:
         btn_frame1=Frame(Student_class_frame,bd=2,relief=RIDGE,bg="white")
         btn_frame1.place(x=0,y=230,width=610,height=35)
 
-        take_photo_btn=Button(btn_frame1,command=self.generate_dataset,text="Take Photo Sample",width=35,font=("times new roman",12,"bold"),bg="blue",fg="white")
+        take_photo_btn=Button(btn_frame1,command=self.generate_dataset, text="Take Photo Sample",width=35,font=("times new roman",12,"bold"),bg="blue",fg="white")
         take_photo_btn.grid(row=0,column=0)
 
         update_photo_btn=Button(btn_frame1,text="Update Photo Sample",width=35,font=("times new roman",12,"bold"),bg="blue",fg="white")
@@ -261,32 +268,35 @@ class student:
         Right_frame.place(x=650,y=5,width=630,height=500)
 
         img_right= Image.open(r"D:\Python\Images\face4.jpg")
-        img_right = img_right.resize((615,130))
+        img_right = img_right.resize((615,200))
         self.photoimg_right=ImageTk.PhotoImage(img_right)
 
         f_lbl=Label(Right_frame,image=self.photoimg_right)
-        f_lbl.place(x=5,y=0,width=615,height=130)
+        f_lbl.place(x=5,y=0,width=615,height=200)
 
         # searach frame
-        search_frame=LabelFrame(Right_frame,bd=2,bg="white",relief=RIDGE,text="Search System",font=("times new roman",20,"bold"))
-        search_frame.place(x=5,y=120,width=615,height=80)
+        # search_frame=LabelFrame(Right_frame,bd=2,bg="white",relief=RIDGE,text="Search System",font=("times new roman",20,"bold"))
+        # search_frame.place(x=5,y=120,width=615,height=80)
 
-        search_label=Label(search_frame,text="Search By ",font=("times new roman",12,"bold"),bg="white")
-        search_label.grid(row=0,column=0,padx=10,pady=5,sticky=W)
+        # search_label=Label(search_frame,text="Search By ",font=("times new roman",12,"bold"),bg="white")
+        # search_label.grid(row=0,column=0,padx=10,pady=5,sticky=W)
 
-        Search_combo=ttk.Combobox(search_frame,font=("times new roman",12,"bold"),state="readonly",width=15)
-        Search_combo["values"]=("Select","Roll No","Phone No")
-        Search_combo.current(0)
-        Search_combo.grid(row=0,column=1,padx=2,pady=10,sticky=W)
+        # Search_combo=ttk.Combobox(search_frame,font=("times new roman",12,"bold"),state="readonly",width=15)
+        # Search_combo["values"]=("Select","Roll No","StudentID")
+        # Search_combo.current(0)
+        # Search_combo.grid(row=0,column=1,padx=2,pady=10,sticky=W)
 
-        Search_entry=ttk.Entry(search_frame,width=12,font=("times new roman",12,"bold"))
-        Search_entry.grid(row=0,column=2,padx=10,pady=5)
+        # Search_entry=ttk.Entry(search_frame,width=12,font=("times new roman",12,"bold"))
+        # Search_entry.grid(row=0,column=2,padx=10,pady=5)
 
-        search_btn=Button(search_frame,text="Search",width=12,font=("times new roman",12,"bold"),bg="blue",fg="white")
-        search_btn.grid(row=0,column=3,padx=5)
+        # # search_btn=Button(search_frame,text="Search",width=12,font=("times new roman",12,"bold"),bg="blue",fg="white")
+        # # search_btn.grid(row=0,column=3,padx=5)
 
-        ShowAll_btn=Button(search_frame,text="Show All",width=12,font=("times new roman",12,"bold"),bg="blue",fg="white")
-        ShowAll_btn.grid(row=0,column=4)
+        # search_btn=Button(search_frame,text="Search",width=12,font=("times new roman",12,"bold"),bg="blue",fg="white", command=self.search_data)
+        # search_btn.grid(row=0,column=3,padx=5)
+
+        # ShowAll_btn=Button(search_frame,text="Show All",width=12,font=("times new roman",12,"bold"),bg="blue",fg="white")
+        # ShowAll_btn.grid(row=0,column=4)
 
 
         # table frame-
@@ -319,21 +329,22 @@ class student:
         self.student_table.heading("photo", text="photosample")
         self.student_table["show"] = "headings"
 
-        self.student_table.column("dept", width=100)
-        self.student_table.column("course", width=100)
-        self.student_table.column("year", width=100)
-        self.student_table.column("sem", width=100)
-        self.student_table.column("id", width=100)
-        self.student_table.column("name", width=100)
-        self.student_table.column("div", width=100)
-        self.student_table.column("roll", width=100)
-        self.student_table.column("gender", width=100)
-        self.student_table.column("dob", width=100)
-        self.student_table.column("email", width=100)
-        self.student_table.column("phone", width=100)
-        self.student_table.column("address", width=100)
-        self.student_table.column("subject", width=100)
-        self.student_table.column("photo", width=100)
+        
+        self.student_table.column("dept", width=100, anchor="center")
+        self.student_table.column("course", width=100, anchor="center")
+        self.student_table.column("year", width=100, anchor="center")
+        self.student_table.column("sem", width=100, anchor="center")
+        self.student_table.column("id", width=100, anchor="center")
+        self.student_table.column("name", width=100, anchor="center")
+        self.student_table.column("div", width=100, anchor="center")
+        self.student_table.column("roll", width=100, anchor="center")
+        self.student_table.column("gender", width=100, anchor="center")
+        self.student_table.column("dob", width=100, anchor="center")
+        self.student_table.column("email", width=100, anchor="center")
+        self.student_table.column("phone", width=100, anchor="center")
+        self.student_table.column("address", width=100, anchor="center")
+        self.student_table.column("subject", width=100, anchor="center")
+        self.student_table.column("photo", width=100, anchor="center")
 
         self.student_table.pack(fill=BOTH, expand=1)
         self.student_table.bind("<ButtonRelease>",self.get_cursor)
@@ -369,10 +380,15 @@ class student:
                 conn.commit()
                 # self.fetch_data()
                 conn.close()
-                messagebox.showinfo("Success","Student Details Has Been Added",parent=self.root)
+                # messagebox.showinfo("Success","Student Details Has Been Added",parent=self.root)
+                self.engine.say("Student details has been added successfully")
+                self.engine.runAndWait()
             except Exception as es:
                 messagebox.showerror("Error",f"Due To :{str(es)}",parent=self.root)
+
+
     
+
     # Fetch function
     def fetch_data(self):
         conn=mysql.connector.connect(host="localhost",username="root",password="Akash@18",database="face_recognization")
@@ -416,7 +432,11 @@ class student:
             messagebox.showerror("Error","All Fields are required",parent=self.root)
         else:
             try:
+                self.engine.say("Do you want to update this student details")
+                self.engine.runAndWait()
                 Update=messagebox.askyesno("Update","Do you want to update this student details",parent=self.root)
+                # self.engine.say("Do you want to update this student details")
+                # self.engine.runAndWait()
                 if Update>0:
                     conn=mysql.connector.connect(host="localhost",username="root",password="Akash@18",database="face_recognization")
                     my_cursor=conn.cursor()
@@ -455,6 +475,8 @@ class student:
             messagebox.showerror("Error","student id must be required",parent=self.root)
         else:
             try:
+                self.engine.say("Do you want to delete the student details")
+                self.engine.runAndWait()
                 delete=messagebox.askyesno("Student Delete Page","Do you want to delete this student",parent=self.root)
                 if delete>0:
                     conn=mysql.connector.connect(host="localhost",username="root",password="Akash@18",database="face_recognization")
@@ -469,7 +491,9 @@ class student:
                 conn.commit()
                 self.fetch_data()
                 conn.close()
-                messagebox.showinfo("Delete","Successfully deleted student details")
+                self.engine.say("student details has been Successfully deleted ")
+                self.engine.runAndWait()
+                # messagebox.showinfo("Delete","Successfully deleted student details")
             except Exception as es:
                 messagebox.showerror("Error",f"Due to:{str(es)}",parent=self.root)
 
@@ -561,7 +585,8 @@ class student:
                         break
                 cap.release()
                 cv2.destroyAllWindows()
-
+                self.engine.say("Generating data sets completed ")
+                self.engine.runAndWait()
                 messagebox.showinfo("Result","Generating data sets completed!!!!!!")
 
             except Exception as es:

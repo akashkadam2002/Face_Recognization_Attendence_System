@@ -1,12 +1,14 @@
+
 from tkinter import*
 from tkinter import ttk
 from PIL import Image,ImageTk
 from tkinter import messagebox
 import mysql.connector
+from time import strftime
+from datetime import datetime
 import cv2
 import os
 import numpy as np
-
 
 class Face_Recognition:
     def __init__(self,root):
@@ -36,6 +38,23 @@ class Face_Recognition:
         #Button
         b1_1 = Button(bg_img, text="Face Recognition", cursor="hand2", command=self.face_recog , font=("times new roman", 18, "bold"),bg="green", fg="white")
         b1_1.place(x=340, y=580,width=200, height=40)
+      
+
+    #=======================Attendence===========================
+    def mark_attendence(self,i,r,n,d):
+        with open("attendence.csv","r+",newline="\n") as f:
+            myDataList=f.readlines()
+            name_list=[]   
+            for line in myDataList:
+                entry=line.split((","))
+                name_list.append(entry[0])
+            if((i not in name_list) and (r not in name_list) and (n not in name_list) and (d not in name_list)):
+                now=datetime.now()
+                d1=now.strftime("%d/%m/%Y")
+                dtString=now.strftime("%H:%M:%S")
+                f.writelines(f"\n{i},{r},{n},{d},{dtString},{d1},Present")
+
+
 
     #=======================Face Recognition======================
 
@@ -55,21 +74,44 @@ class Face_Recognition:
 
                 my_cursor.execute("select Name from student where Student_id="+str(id))
                 n=my_cursor.fetchone()
-                n="+".join(n)
+                n="+".join(n) 
 
                 my_cursor.execute("select Roll from student where Student_id="+str(id))
                 r=my_cursor.fetchone()
-                r="+".join(r)
+                r="+".join(r) 
 
                 my_cursor.execute("select Dep from student where Student_id="+str(id))
                 d=my_cursor.fetchone()
-                d="+".join(d)
+                d="+".join(d) 
+
+                my_cursor.execute("select Student_id from student where Student_id="+str(id))
+                i=my_cursor.fetchone()
+                i="+".join(i) 
+
+
+                # my_cursor.execute("select Name from student where Student_id=" + str(id))
+                # name_row = my_cursor.fetchone()
+                # n = "+".join(name_row) if name_row else ""
+
+                # my_cursor.execute("select Roll from student where Student_id=" + str(id))
+                # roll_row = my_cursor.fetchone()
+                # r = "+".join(roll_row) if roll_row else ""
+
+                # my_cursor.execute("select Dep from student where Student_id=" + str(id))
+                # dep_row = my_cursor.fetchone()
+                # d = "+".join(dep_row) if dep_row else ""
+
+                # my_cursor.execute("select Student_id from student where Student_id=" + str(id))
+                # id_row = my_cursor.fetchone()
+                # i = "+".join(id_row) if id_row else ""
 
 
                 if confidence>77:
-                    cv2.putText(img,f"Roll:{r}",(x,y-45),cv2.FONT_HERSHEY_COMPLEX,0.8,(255,255),3)
+                    cv2.putText(img,f"ID:{i}",(x,y-70),cv2.FONT_HERSHEY_COMPLEX,0.8,(255,255),3)
+                    cv2.putText(img,f"Roll No.:{r}",(x,y-45),cv2.FONT_HERSHEY_COMPLEX,0.8,(255,255),3)
                     cv2.putText(img,f"Name:{n}",(x,y-25),cv2.FONT_HERSHEY_COMPLEX,0.8,(255,255),3)
                     cv2.putText(img,f"Department:{d}",(x,y-5),cv2.FONT_HERSHEY_COMPLEX,0.8,(255,255),3)
+                    self.mark_attendence(i,r,n,d)
                 else:
                     cv2.rectangle(img, (x,y), (x+w,y+h), (0,255,0), 3)
                     cv2.putText(img,f"Unknown Face:{d}",(x,y-5),cv2.FONT_HERSHEY_COMPLEX,0.8,(255,255),3)
@@ -96,11 +138,15 @@ class Face_Recognition:
 
             if cv2.waitKey(1) == 13:
                 break
+            
         cv2.destroyAllWindows()    
         video_cap.release()
-        
+        # self.root.quit()
+
+
         
 if __name__ == "__main__":
     root=Tk()
     obj=Face_Recognition(root)
     root.mainloop()
+

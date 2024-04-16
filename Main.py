@@ -1,19 +1,26 @@
 from tkinter import *
 from tkinter import ttk
+import tkinter
+import tkinter.messagebox
 from PIL import Image, ImageTk
 import os
 from student import student
 from train import Train
 from Face_Recognition import Face_Recognition
+from Attendance import Attendance
+import pyttsx3
 
 class Face_recognise:
+        
     def __init__(self, root):
+        self.engine = pyttsx3.init()
         self.root = root
         self.root.title("Face Recognization System")
 
         screen_width = root.winfo_screenwidth()
         screen_height = root.winfo_screenheight()
         self.root.geometry(f"{screen_width}x{screen_height}+0+0")
+        self.root.after(1000, self.display_welcome_message)
 
         # FIRST IMG
         img = Image.open(r"D:\Python\Images\face4.jpg")
@@ -51,6 +58,9 @@ class Face_recognise:
                           bg="white", fg="orange")
         title_lbl.place(x=0, y=0, width=screen_width, height=int(screen_height / 15))
 
+
+
+
         # Student button
         img4 =Image.open(r"D:\Python\Images\face4.jpg")
         img4 = img4.resize((int(screen_width / 7), int(screen_height / 4)))
@@ -60,7 +70,7 @@ class Face_recognise:
         b1.place(x=int(screen_width / 7), y=int(screen_height / 10), width=int(screen_width / 7),
                  height=int(screen_height / 4))
 
-        b1_1 = Button(bg_img, text="Student details", cursor="hand2",command=self.student_details, font=("times new roman", 15, "bold"),
+        b1_1 = Button(bg_img, text="STUDENT DETAILS", cursor="hand2",command=self.student_details, font=("times new roman", 15, "bold"),
                       bg="darkblue", fg="white")
         b1_1.place(x=int(screen_width / 7), y=int(screen_height / 10) + int(screen_height / 4) + 10,
                    width=int(screen_width / 7), height=int(screen_height / 20))
@@ -74,7 +84,7 @@ class Face_recognise:
         b2.place(x=int(screen_width / 2.4), y=int(screen_height / 10), width=int(screen_width / 7),
                   height=int(screen_height / 4))
 
-        b2_1 = Button(bg_img, text="Face Detector", cursor="hand2", command=self.face_data ,font=("times new roman", 15, "bold"),
+        b2_1 = Button(bg_img, text="FACE DETECTOR", cursor="hand2", command=self.face_data ,font=("times new roman", 15, "bold"),
                        bg="darkblue", fg="white")
         b2_1.place(x=int(screen_width / 2.4), y=int(screen_height / 10) + int(screen_height / 4) + 10,
                     width=int(screen_width / 7), height=int(screen_height / 20))
@@ -84,11 +94,11 @@ class Face_recognise:
         img6 = img6.resize((int(screen_width / 7), int(screen_height / 4)))
         self.photoimg6 = ImageTk.PhotoImage(img6)
 
-        b3 = Button(bg_img, image=self.photoimg6, cursor="hand2")
+        b3 = Button(bg_img, image=self.photoimg6, command=self.attend , cursor="hand2")
         b3.place(x=int(screen_width / 1.4), y=int(screen_height / 10), width=int(screen_width / 7),
                   height=int(screen_height / 4))
 
-        b3_1 = Button(bg_img, text="Attendance", cursor="hand2", font=("times new roman", 15, "bold"),
+        b3_1 = Button(bg_img, text="ATTENDENCE", cursor="hand2",command=self.attend , font=("times new roman", 15, "bold"),
                        bg="darkblue", fg="white")
         b3_1.place(x=int(screen_width / 1.4), y=int(screen_height / 10) + int(screen_height / 4) + 10,
                     width=int(screen_width / 7), height=int(screen_height / 20))
@@ -116,7 +126,7 @@ class Face_recognise:
         b5.place(x=int(screen_width / 7), y=int(screen_height / 2.1), width=int(screen_width / 7),
                   height=int(screen_height / 4))
 
-        b5_1 = Button(bg_img, text="Train Data", cursor="hand2",command=self.train_data, font=("times new roman", 15, "bold"),
+        b5_1 = Button(bg_img, text="TRAIN DATA", cursor="hand2",command=self.train_data, font=("times new roman", 15, "bold"),
                        bg="darkblue", fg="white")
         b5_1.place(x=int(screen_width / 7), y=int(screen_height / 2.1) + int(screen_height / 4) + 10,
                     width=int(screen_width / 7), height=int(screen_height / 20))
@@ -130,43 +140,46 @@ class Face_recognise:
         b6.place(x=int(screen_width / 2.4), y=int(screen_height / 2.1), width=int(screen_width / 7),
                   height=int(screen_height / 4))
 
-        b6_1 = Button(bg_img, text="Photos", cursor="hand2",command=self.open_img, font=("times new roman", 15, "bold"),
+        b6_1 = Button(bg_img, text="PHOTOS", cursor="hand2",command=self.open_img, font=("times new roman", 15, "bold"),
                        bg="darkblue", fg="white")
         b6_1.place(x=int(screen_width / 2.4), y=int(screen_height / 2.1) + int(screen_height / 4) + 10,
                     width=int(screen_width / 7), height=int(screen_height / 20))
 
-        # Developer button
+        # Exit button
         img10 = Image.open(r"D:\Python\Images\face4.jpg")
         img10 = img10.resize((int(screen_width / 7), int(screen_height / 4)))
         self.photoimg10 = ImageTk.PhotoImage(img10)
 
-        b7 = Button(bg_img, image=self.photoimg10, cursor="hand2")
+        b7 = Button(bg_img, image=self.photoimg10, cursor="hand2" ,command=self.exit)
         b7.place(x=int(screen_width / 1.4), y=int(screen_height / 2.1), width=int(screen_width / 7),
                   height=int(screen_height / 4))
 
-        b7_1 = Button(bg_img, text="Developer", cursor="hand2", font=("times new roman", 15, "bold"),
+        b7_1 = Button(bg_img, text="EXIT", cursor="hand2",command=self.exit , font=("times new roman", 15, "bold"),
                        bg="darkblue", fg="white")
         b7_1.place(x=int(screen_width / 1.4), y=int(screen_height / 2.1) + int(screen_height / 4) + 10,
                     width=int(screen_width / 7), height=int(screen_height / 20))
-
-        # Exit button
-        # img11 = Image.open(r"D:\Python\face4.jpg")
-        # img11 = img11.resize((int(screen_width / 7), int(screen_height / 4)))
-        # self.photoimg11 = ImageTk.PhotoImage(img11)
-
-        # b8 = Button(bg_img, image=self.photoimg11, cursor="hand2")
-        # b8.place(x=int(screen_width / 1.16), y=int(screen_height / 2.1), width=int(screen_width / 7),
-        #           height=int(screen_height / 4))
-
-        # b8_1 = Button(bg_img, text="Exit", cursor="hand2", font=("times new roman", 15, "bold"),
-        #                bg="darkblue", fg="white")
-        # b8_1.place(x=int(screen_width / 1.16), y=int(screen_height / 2.1) + int(screen_height / 4) + 10,
-        #             width=int(screen_width / 7), height=int(screen_height / 20))
-
-
+        
+    def display_welcome_message(self):
+            self.engine.say("Welcome to the face recognition attendance system application")
+            self.engine.runAndWait()
+        
 
     def open_img(self):
         os.startfile("data")
+
+
+    def exit(self):
+        self.engine.say("Are you sure you want to exit")
+        self.engine.runAndWait()
+
+        self.exit=tkinter.messagebox.askyesno("Face Recognition", "Are you sure you want exit", parent=self.root)  
+        if self.exit > 0:
+            self.root.destroy()
+            self.engine.say("Thank You!")
+            self.engine.runAndWait()
+
+        else:
+            return      
 
     # function
       
@@ -180,10 +193,15 @@ class Face_recognise:
 
     def face_data(self):
         self.new_window = Toplevel(self.root)
-        self.app = Face_Recognition(self.new_window)        
+        self.app = Face_Recognition(self.new_window) 
+
+    def attend(self):
+        self.new_window = Toplevel(self.root)
+        self.app = Attendance(self.new_window)            
 
 
 if __name__ == "__main__":
     root = Tk()
     obj = Face_recognise(root)
     root.mainloop()
+    
